@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Home page{% endblock %}
+
+{% block content %}
+    <h3>Home page</h3>
+
+{% for review in page_object %}
+    <div class="container posts-content">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <div class="media mb-3">
+                      <img src="{{review.user.profile_image.url}}" class="d-block ui-w-40 rounded-circle" alt="">
+                      <div class="media-body ml-3">
+                        <b>{{review.user.username}}</b> rated this book {{review.starts_given}} stars
+                        <div class="text-muted small">{{review.created_at | date:"M d, Y"}}</div>
+                      </div>
+                    </div>
+
+                    <p>
+                     {{review.comment|truncatechars:300}}
+                     </p>
+                      <img src="{{review.book.cover_picture.url}}" class="cover-pic center">
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+<nav aria-label="...">
+  <ul class="pagination">
+    {% if page_object.has_previous %}
+    <li class="page-item">
+      <a href="?page=1" class="page-link">First</a>
+    </li>
+    <li class="page-item">
+      <a href="?page={{ page_object.previous_page_number }}" class="page-link">Previous</a>
+    </li>
+    {% endif %}
+
+    <li class="page-item active">
+      <a href="#" class="page-link">{{page_object.number}}</a>
+    </li>
+
+    {% if books.has_next %}
+    <li class="page-item">
+      <a href="?page={{page_object.next_page_number}}" class="page-link">Next</a>
+    </li>
+    <li class="page-item">
+      <a href="?page={{ page_object.paginator.num_pages }}" class="page-link">Last</a>
+    </li>
+    {% endif %}
+
+  </ul>
+</nav>
+
+{% endblock %}

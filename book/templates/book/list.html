@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Book list{% endblock %}
+
+{% block content %}
+    <h1>Books</h1>
+
+    <div class="row mb-3">
+        <div class="col-4">
+            <form class="d-flex" method="get">
+                <input value="{{search_query}}" name="q" class="form-control" type="text" placeholder="Search">
+
+                <button class="btn btn-success" style="margin-left:10px" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+    {% if books %}
+            {% for book in books %}
+                <div class="row mb-4">
+                    <div class="col-2">
+                        <img width="250px" src="{{book.cover_picture.url}}" >
+                    </div>
+                    <div class="col-6" style="margin-left: 50px">
+                        <a href="{% url 'books:detail' book.id %}">{{book.title}}</a>
+                        <p>{{book.description|truncatewords:100}}</p>
+                    </div>
+                </div>
+    {% endfor %}
+
+
+<nav aria-label="...">
+  <ul class="pagination">
+    {% if books.has_previous %}
+    <li class="page-item">
+      <a href="?page=1" class="page-link">First</a>
+    </li>
+    <li class="page-item">
+      <a href="?page={{ books.previous_page_number }}" class="page-link">Previous</a>
+    </li>
+    {% endif %}
+
+    <li class="page-item active">
+      <a href="#" class="page-link">{{books.number}}</a>
+    </li>
+
+    {% if books.has_next %}
+    <li class="page-item">
+      <a href="?page={{books.next_page_number}}" class="page-link">Next</a>
+    </li>
+    <li class="page-item">
+      <a href="?page={{ books.paginator.num_pages }}" class="page-link">Last</a>
+    </li>
+    {% endif %}
+
+  </ul>
+</nav>
+
+
+    {% else %}
+        No books found.
+    {% endif %}
+{% endblock %}
